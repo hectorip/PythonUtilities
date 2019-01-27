@@ -4,20 +4,12 @@ import os
 def get_filename(name, source):
     return os.path.join(source, name)
 
-
-def create_pdf(name, source="sources"):
-    wf = open(get_filename(name, source), 'wb')
-    writer = PyPDF2.PdfFileWriter()
-    wf.close()
-
-
 def concatenate(name1, name2, skip_pages=0, source='sources'):
-    wf = open(get_filename('final.pdf', source), 'wb')
+    wf = open(get_filename('final.pdf', source), 'ab')
     with open(get_filename(name1, source), 'rb') as rf1:
         with open(get_filename(name2, source), 'rb') as rf2:
             pdf1 = PyPDF2.PdfFileReader(rf1)
             pdf2 = PyPDF2.PdfFileReader(rf2)
-
             writer = PyPDF2.PdfFileWriter()
             for p in range(pdf1.numPages):
                 writer.addPage(pdf1.getPage(p))
@@ -30,9 +22,9 @@ def concatenate(name1, name2, skip_pages=0, source='sources'):
 
 
 
-chapters = ["Chapter{}.pdf".format(n) for n in range(3,13)]
-final_file = "final.pdf"
+chapters = ["Chapter{}.pdf".format(n) for n in range(3,12)]
+# final_file = "final.pdf"
 # create_pdf(final_file)
-concatenate("Chapter1.pdf", "Chapter2.pdf")
+concatenate("Chapter1.pdf", "Chapter2.pdf", 2)
 for chapter in chapters:
-    concatenate(final_file, chapter, 1)
+    concatenate("final.pdf", chapter, 2)
